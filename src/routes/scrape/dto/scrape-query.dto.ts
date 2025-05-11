@@ -1,5 +1,12 @@
-import { IsEnum, IsInt, IsOptional, IsPositive, IsString, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 export enum GradeOption {
   ALL = 'all',
@@ -19,16 +26,20 @@ export enum GradeOption {
 }
 
 export class ScrapeQueryDto {
+  @Transform(({ value }) => value === 'true')
+  @IsOptional()
+  @IsBoolean()
+  allowAIProcessing: boolean = false;
+
   @IsString()
-  q!: string;
+  q: string;
 
   @IsOptional()
   @IsEnum(GradeOption, { message: 'Invalid grade option' })
-  grade?: GradeOption;
+  grade: GradeOption = GradeOption['ALL'];
 
   @Type(() => Number) // Converts query param from string to number
   @IsInt({ message: 'Page must be an integer' })
-  @IsPositive({ message: 'Page must be at least 1' })
   @Min(1, { message: 'Page must be at least 1' })
-  page!: number;
+  page: number;
 }
