@@ -1,12 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsEnum, IsString, validateSync } from 'class-validator';
-
-enum Environment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test',
-  Provision = 'provision',
-}
+import { IsString, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   @IsString()
@@ -14,6 +7,9 @@ class EnvironmentVariables {
 
   @IsString()
   DEEPSEEK_API_KEY: string;
+
+  @IsString()
+  REDIS_URL: string;
 }
 
 export function validate(config: Record<string, unknown>) {
